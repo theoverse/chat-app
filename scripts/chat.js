@@ -24,18 +24,20 @@ class Chatroom {
     }
     getChats(callback) {
         this.chats
-            .onSnapshot(snapshot => {
-                snapshot.docChanges().forEach(change => {
-                    if (change.type === 'added') {
-                        // update the ui
-                        callback(change.doc.data())
-                    }
-                })
+        .where('room', '==', this.room)
+        .orderBy('created_at')
+        .onSnapshot(snapshot => {
+            snapshot.docChanges().forEach(change => {
+                if (change.type === 'added') {
+                    // update the ui
+                    callback(change.doc.data())
+                }
             })
+        })
     }
 }
 
-const chatroom = new Chatroom('devs', 'john')
+const chatroom = new Chatroom('general', 'john')
 // console.log(chatroom)
 
 // chatroom.addChat('hello everyone')
